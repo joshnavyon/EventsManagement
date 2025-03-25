@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Felix Event Management</title>
+
+    <link rel="stylesheet" href="Framework/css/bootstrap.min.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div class="container mt-5">
+        <h1 class="text-center">Hello, Vue with Bootstrap!</h1>
+        <button class="btn btn-primary" @click="increment">Click Me</button>
+        <p class="mt-3">Count: {{ count }}</p>
+      </div>
+    </div>
+
+    <script src="../framework/js/vue.global.js"></script>
+    <script src="../framework/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+      const { createApp } = Vue;
+
+      createApp({
+        data() {
+          return {
+            count: 0,
+          };
+        },
+        methods: {
+          increment() {
+            this.count++;
+          },
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>
