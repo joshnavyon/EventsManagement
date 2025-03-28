@@ -5,19 +5,288 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Felix Event Management</title>
 
-    <link rel="stylesheet" href="Framework/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/framework/css/bootstrap.min.css" />
   </head>
   <body>
     <div id="app">
-      <div class="container mt-5">
-        <h1 class="text-center">Hello, Vue with Bootstrap!</h1>
-        <button class="btn btn-primary" @click="increment">Click Me</button>
-        <p class="mt-3">Count: {{ count }}</p>
+      <!-- Header -->
+      <div id="header">
+        <nav class="navbar navbar-expand-lg navbar-light bg-dark px-5">
+          <h1 class="m-0 d-flex flex-column justify-content-center">
+            <a
+              class="navbar-brand m-0 p-3 text-light"
+              href="#"
+              @click="setRoute('home')"
+              :class="{'active': isActive('home')}"
+              >Josh Event Management</a
+            >
+          </h1>
+          <button
+            class="navbar-toggler bg-light"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup"
+            :aria-expanded="!isNavbarCollapsed ? 'true' : 'false'"
+            aria-label="Toggle navigation"
+            @click="toggleNavbar"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div
+            class="collapse navbar-collapse"
+            :class="{'show': !isNavbarCollapsed}"
+            id="navbarNavAltMarkup"
+          >
+            <div class="navbar-nav">
+              <a
+                class="nav-item nav-link text-light"
+                :class="{'active': isActive('home')}"
+                href="#"
+                @click="setRoute('home')"
+              >
+                Home
+              </a>
+              <a
+                class="nav-item nav-link text-light"
+                :class="{'active': isActive('events')}"
+                href="#"
+                @click="setRoute('events')"
+              >
+                Events
+              </a>
+              <a
+                class="nav-item nav-link text-light"
+                :class="{'active': isActive('register')}"
+                href="#"
+                @click="setRoute('register')"
+              >
+                Register
+              </a>
+            </div>
+          </div>
+        </nav>
+
+        <img
+          v-if="route == 'home'"
+          class="img-fluid"
+          src="/src/event-banner-min.jpg"
+          alt="Event Banner"
+        />
+      </div>
+
+      <!-- Home Page -->
+      <div v-if="route == 'home'" class="container mt-5" id="body">
+        <div class="row mb-5"><h2 class="text-center">Why Choose Us</h2></div>
+        <div class="row container">
+          <div class="col-md-6 col-lg-4 mb-3" v-for="(card, index) in cards" :key="index">
+            <div class="card" style="min-height: 250px">
+              <img
+                class="card-img-top w-25 h-auto p-3"
+                :src="card.image"
+                :alt="`${card.title} icon`"
+              />
+              <div class="card-body">
+                <h5 class="card-title">{{ card.title }}</h5>
+                <p class="card-text">{{ card.text }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Events Page -->
+      <div v-else-if="route == 'events'" class="container mt-5" id="body">
+        <h2>Events</h2>
+
+        <div class="container">
+          <form class="container d-flex gap-5 py-4">
+            <fieldset class="w-50">
+              <legend>Filter by:</legend>
+
+              <div class="form-group mb-2">
+                <label for="eid" class="form-label">Event ID:</label>
+                <input type="text" id="eid" name="eid" class="form-control" v-model="qEvents.id" />
+              </div>
+
+              <div class="form-group mb-2">
+                <label for="ename" class="form-label">Event Name:</label>
+                <input
+                  type="text"
+                  id="ename"
+                  name="ename"
+                  class="form-control"
+                  v-model="qEvents.name"
+                />
+              </div>
+
+              <div class="form-group mb-2">
+                <label for="edur" class="form-label">Duration:</label>
+                <input
+                  type="text"
+                  id="edur"
+                  name="edur"
+                  class="form-control"
+                  v-model="qEvents.duration"
+                />
+                <button class="mt-3 btn btn-primary" type="button" @click="resetQuery()">
+                  Reset
+                </button>
+              </div>
+            </fieldset>
+
+            <fieldset class="w-50">
+              <legend>Category:</legend>
+
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  id="technology"
+                  name="category"
+                  value="technology"
+                  v-model="qEvents.category"
+                />
+                <label class="form-check-label" for="technology">Technology</label>
+              </div>
+
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  id="business"
+                  name="category"
+                  value="business"
+                  v-model="qEvents.category"
+                />
+                <label class="form-check-label" for="business">Business</label>
+              </div>
+
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  id="marketing"
+                  name="category"
+                  value="marketing"
+                  v-model="qEvents.category"
+                />
+                <label class="form-check-label" for="marketing">Marketing</label>
+              </div>
+
+              <div class="form-check" class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  id="finance"
+                  name="category"
+                  value="finance"
+                  v-model="qEvents.category"
+                />
+                <label class="form-check-label" for="finance">Finance</label>
+              </div>
+
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  id="all"
+                  name="category"
+                  value=""
+                  v-model="qEvents.category"
+                  checked
+                />
+                <label class="form-check-label" for="all">All</label>
+              </div>
+            </fieldset>
+          </form>
+
+          <table class="table table-responsive table-bordered table-striped table-hover">
+            <caption>
+              List of Events based on name, category, or duration of the events
+            </caption>
+
+            <thead>
+              <tr>
+                <th scope="col">
+                  <input
+                    type="text"
+                    id="eid"
+                    name="eid"
+                    class="form-control"
+                    v-model="qEvents.id"
+                  />
+                </th>
+                <th scope="col">
+                  <input
+                    type="text"
+                    id="ename"
+                    name="ename"
+                    class="form-control"
+                    v-model="qEvents.name"
+                  />
+                </th>
+                <th scope="col">Category</th>
+                <th scope="col">
+                  <input
+                    type="text"
+                    id="edur"
+                    name="edur"
+                    class="form-control"
+                    v-model="qEvents.duration"
+                  />
+                </th>
+              </tr>
+            </thead>
+
+            <thead>
+              <tr>
+                <th scope="col">Event ID</th>
+                <th scope="col">Event Name</th>
+                <th scope="col">Category</th>
+                <th scope="col">Duration Hours</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr v-for="(event, eventid) in filterEvents" :key="eventid">
+                <td headers="Event ID">{{ event.eventid }}</td>
+                <td headers="Event Name">{{ event.eventname }}</td>
+                <td headers="Category">{{ event.category }}</td>
+                <td headers="Duration Hours">{{ event.durationhour }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Register Page -->
+      <div v-else-if="route == 'register'" class="container mt-5" id="body">
+        <h2>Register</h2>
+      </div>
+
+      <!-- Footer -->
+      <div class="p-3" id="footer">
+        <footer>
+          <hr />
+          <div class="d-flex justify-content-around">
+            <div class="">&copy; Felix Joshua, 2025.</div>
+            <div class="">
+              <a
+                class="nav-item nav-link"
+                :class="{'active': isActive('home')}"
+                href="#"
+                @click="setRoute('home')"
+                >Josh Event Management</a
+              >
+            </div>
+          </div>
+        </footer>
       </div>
     </div>
 
-    <script src="../framework/js/vue.global.js"></script>
-    <script src="../framework/js/bootstrap.bundle.min.js"></script>
+    <script src="/framework/js/vue.global.js"></script>
+    <script src="/framework/js/bootstrap.bundle.min.js"></script>
 
     <script>
       const { createApp } = Vue;
@@ -25,12 +294,199 @@
       createApp({
         data() {
           return {
-            count: 0,
+            route: "home",
+            isNavbarCollapsed: true,
+            qEvents: { id: "", name: "", category: "", duration: "" },
+            cards: [
+              {
+                title: "Expert Planning",
+                text: "We bring years of experience in planning and executing flawless events, ensuring every detail is covered.",
+                image: "/src/planning-icon.png",
+              },
+              {
+                title: "Tailored Experiences",
+                text: "Every event is unique. We customize our services to match your vision and preferences.",
+                image: "/src/experience-icon.png",
+              },
+              {
+                title: "Reliable Vendor Network",
+                text: "We collaborate with top-tier vendors to provide high-quality catering, decor, and entertainment.",
+                image: "/src/trust-icon.png",
+              },
+              {
+                title: "Stress-Free Execution",
+                text: "From start to finish, we handle everything, allowing you to enjoy the event without any worries.",
+                image: "/src/stress-free-icon.png",
+              },
+              {
+                title: "Innovative Themes & Designs",
+                text: "We bring creativity to the table, offering fresh ideas and unique themes for your event.",
+                image: "/src/innovation-icon.png",
+              },
+              {
+                title: "Budget-Friendly Packages",
+                text: "We provide cost-effective solutions without compromising on quality or experience.",
+                image: "/src/budget-icon.png",
+              },
+            ],
+            events: [
+              {
+                eventid: "EVT10001",
+                eventname: "Tech Innovations Conference",
+                category: "Technology",
+                durationhour: 8,
+              },
+              {
+                eventid: "EVT10002",
+                eventname: "Startup Pitch Day",
+                category: "Business",
+                durationhour: 6,
+              },
+              {
+                eventid: "EVT10003",
+                eventname: "AI & Machine Learning Summit",
+                category: "Technology",
+                durationhour: 10,
+              },
+              {
+                eventid: "EVT10004",
+                eventname: "Cybersecurity Workshop",
+                category: "Technology",
+                durationhour: 4,
+              },
+              {
+                eventid: "EVT10005",
+                eventname: "Digital Marketing Bootcamp",
+                category: "Marketing",
+                durationhour: 6,
+              },
+              {
+                eventid: "EVT10006",
+                eventname: "Blockchain and Cryptocurrency",
+                category: "Finance",
+                durationhour: 5,
+              },
+              {
+                eventid: "EVT10007",
+                eventname: "Entrepreneurship Forum",
+                category: "Business",
+                durationhour: 7,
+              },
+              {
+                eventid: "EVT10008",
+                eventname: "Data Science Hackathon",
+                category: "Technology",
+                durationhour: 12,
+              },
+              {
+                eventid: "EVT10009",
+                eventname: "Leadership and Management Summit",
+                category: "Business",
+                durationhour: 9,
+              },
+              {
+                eventid: "EVT10010",
+                eventname: "E-commerce Strategies",
+                category: "Marketing",
+                durationhour: 6,
+              },
+              {
+                eventid: "EVT10011",
+                eventname: "AI for Business",
+                category: "Business",
+                durationhour: 8,
+              },
+              {
+                eventid: "EVT10012",
+                eventname: "IoT & Smart Devices Expo",
+                category: "Technology",
+                durationhour: 7,
+              },
+              {
+                eventid: "EVT10013",
+                eventname: "Brand Strategy and Growth",
+                category: "Marketing",
+                durationhour: 5,
+              },
+              {
+                eventid: "EVT10014",
+                eventname: "Investment and Wealth Management",
+                category: "Finance",
+                durationhour: 6,
+              },
+              {
+                eventid: "EVT10015",
+                eventname: "Financial Technology (FinTech) Summit",
+                category: "Finance",
+                durationhour: 8,
+              },
+              {
+                eventid: "EVT10016",
+                eventname: "AI Ethics and Regulations",
+                category: "Technology",
+                durationhour: 4,
+              },
+              {
+                eventid: "EVT10017",
+                eventname: "Business Analytics Workshop",
+                category: "Business",
+                durationhour: 6,
+              },
+              {
+                eventid: "EVT10018",
+                eventname: "SEO and Content Marketing",
+                category: "Marketing",
+                durationhour: 7,
+              },
+              {
+                eventid: "EVT10019",
+                eventname: "Cryptocurrency Investment Strategies",
+                category: "Finance",
+                durationhour: 9,
+              },
+              {
+                eventid: "EVT10020",
+                eventname: "Social Media Marketing Trends",
+                category: "Marketing",
+                durationhour: 5,
+              },
+            ],
           };
         },
         methods: {
-          increment() {
-            this.count++;
+          toggleNavbar() {
+            this.isNavbarCollapsed = !this.isNavbarCollapsed;
+          },
+          setRoute(link) {
+            this.route = link;
+          },
+          isActive(link) {
+            return this.route === link;
+          },
+          resetQuery() {
+            this.qEvents.id = "";
+            this.qEvents.name = "";
+            this.qEvents.category = "";
+            this.qEvents.duration = "";
+          },
+        },
+        computed: {
+          filterEvents() {
+            return this.events.filter((e) => {
+              const filterId = e.eventid.toLowerCase().match(this.qEvents.id.toLowerCase());
+
+              const filterName = e.eventname.toLowerCase().match(this.qEvents.name.toLowerCase());
+
+              const filterCategory =
+                this.qEvents.category !== ""
+                  ? e.category.toLowerCase().match(this.qEvents.category.toLowerCase())
+                  : true;
+
+              const filterDuration =
+                this.qEvents.duration !== "" ? e.durationhour == this.qEvents.duration : true;
+
+              return filterId && filterName && filterCategory && filterDuration;
+            });
           },
         },
       }).mount("#app");
