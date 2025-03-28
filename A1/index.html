@@ -99,42 +99,9 @@
       <div v-else-if="route == 'events'" class="container mt-5" id="body">
         <h2>Events</h2>
 
+        <button class="mt-3 btn btn-primary" type="button" @click="resetQuery()">Reset</button>
         <div class="container">
           <form class="container d-flex gap-5 py-4">
-            <fieldset class="w-50">
-              <legend>Filter by:</legend>
-
-              <div class="form-group mb-2">
-                <label for="eid" class="form-label">Event ID:</label>
-                <input type="text" id="eid" name="eid" class="form-control" v-model="qEvents.id" />
-              </div>
-
-              <div class="form-group mb-2">
-                <label for="ename" class="form-label">Event Name:</label>
-                <input
-                  type="text"
-                  id="ename"
-                  name="ename"
-                  class="form-control"
-                  v-model="qEvents.name"
-                />
-              </div>
-
-              <div class="form-group mb-2">
-                <label for="edur" class="form-label">Duration:</label>
-                <input
-                  type="text"
-                  id="edur"
-                  name="edur"
-                  class="form-control"
-                  v-model="qEvents.duration"
-                />
-                <button class="mt-3 btn btn-primary" type="button" @click="resetQuery()">
-                  Reset
-                </button>
-              </div>
-            </fieldset>
-
             <fieldset class="w-50">
               <legend>Category:</legend>
 
@@ -226,7 +193,15 @@
                     v-model="qEvents.name"
                   />
                 </th>
-                <th scope="col">Category</th>
+                <th scope="col">
+                  <input
+                    type="text"
+                    id="ecat"
+                    name="ecat"
+                    class="form-control"
+                    v-model="qEvents.category"
+                  />
+                </th>
                 <th scope="col">
                   <input
                     type="text"
