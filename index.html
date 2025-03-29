@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Felix Event Management</title>
-
     <link rel="stylesheet" href="/framework/css/bootstrap.min.css" />
   </head>
   <body>
@@ -76,7 +75,7 @@
       </div>
 
       <!-- Home Page -->
-      <div v-if="route == 'home'" class="container mt-5" id="body">
+      <div v-if="route == 'home'" class="container mt-5" id="home-body">
         <div class="row mb-5"><h2 class="text-center">Why Choose Us</h2></div>
         <div class="row container">
           <div class="col-md-6 col-lg-4 mb-3" v-for="(card, index) in cards" :key="index">
@@ -96,75 +95,79 @@
       </div>
 
       <!-- Events Page -->
-      <div v-else-if="route == 'events'" class="container mt-5" id="body">
+      <div v-else-if="route == 'events'" class="container mt-5" id="event-body">
         <h2>Events</h2>
 
-        <button class="mt-3 btn btn-primary" type="button" @click="resetQuery()">Reset</button>
         <div class="container">
           <form class="container d-flex gap-5 py-4">
             <fieldset class="w-50">
               <legend>Category:</legend>
 
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  id="technology"
-                  name="category"
-                  value="technology"
-                  v-model="qEvents.category"
-                />
-                <label class="form-check-label" for="technology">Technology</label>
+              <div class="d-flex justify-content-around">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    id="etechnology"
+                    name="category"
+                    value="technology"
+                    v-model="qEvent.category"
+                  />
+                  <label class="form-check-label" for="technology">Technology</label>
+                </div>
+
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    id="ebusiness"
+                    name="category"
+                    value="business"
+                    v-model="qEvent.category"
+                  />
+                  <label class="form-check-label" for="business">Business</label>
+                </div>
+
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    id="marketing"
+                    name="category"
+                    value="marketing"
+                    v-model="qEvent.category"
+                  />
+                  <label class="form-check-label" for="marketing">Marketing</label>
+                </div>
+
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    id="efinance"
+                    name="category"
+                    value="finance"
+                    v-model="qEvent.category"
+                  />
+                  <label class="form-check-label" for="finance">Finance</label>
+                </div>
+
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    id="all"
+                    name="category"
+                    value=""
+                    v-model="qEvent.category"
+                  />
+                  <label class="form-check-label" for="all">All</label>
+                </div>
               </div>
 
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  id="business"
-                  name="category"
-                  value="business"
-                  v-model="qEvents.category"
-                />
-                <label class="form-check-label" for="business">Business</label>
-              </div>
-
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  id="marketing"
-                  name="category"
-                  value="marketing"
-                  v-model="qEvents.category"
-                />
-                <label class="form-check-label" for="marketing">Marketing</label>
-              </div>
-
-              <div class="form-check" class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  id="finance"
-                  name="category"
-                  value="finance"
-                  v-model="qEvents.category"
-                />
-                <label class="form-check-label" for="finance">Finance</label>
-              </div>
-
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  id="all"
-                  name="category"
-                  value=""
-                  v-model="qEvents.category"
-                  checked
-                />
-                <label class="form-check-label" for="all">All</label>
-              </div>
+              <button class="mt-3 btn btn-primary" type="button" @click="resetQuery()">
+                Reset
+              </button>
             </fieldset>
           </form>
 
@@ -181,7 +184,8 @@
                     id="eid"
                     name="eid"
                     class="form-control"
-                    v-model="qEvents.id"
+                    v-model="qEvent.id"
+                    aria-label="Filter events by ID"
                   />
                 </th>
                 <th scope="col">
@@ -190,7 +194,8 @@
                     id="ename"
                     name="ename"
                     class="form-control"
-                    v-model="qEvents.name"
+                    v-model="qEvent.name"
+                    aria-label="Filter events by Name"
                   />
                 </th>
                 <th scope="col">
@@ -199,7 +204,8 @@
                     id="ecat"
                     name="ecat"
                     class="form-control"
-                    v-model="qEvents.category"
+                    v-model="qEvent.category"
+                    aria-label="Filter events by Category"
                   />
                 </th>
                 <th scope="col">
@@ -208,7 +214,8 @@
                     id="edur"
                     name="edur"
                     class="form-control"
-                    v-model="qEvents.duration"
+                    v-model="qEvent.duration"
+                    aria-label="Filter events by Duration"
                   />
                 </th>
               </tr>
@@ -216,19 +223,19 @@
 
             <thead>
               <tr>
-                <th scope="col">Event ID</th>
-                <th scope="col">Event Name</th>
-                <th scope="col">Category</th>
-                <th scope="col">Duration Hours</th>
+                <th scope="col" id="event-id">Event ID</th>
+                <th scope="col" id="event-name">Event Name</th>
+                <th scope="col" id="event-name">Category</th>
+                <th scope="col" id="event-duration">Duration Hours</th>
               </tr>
             </thead>
 
             <tbody>
-              <tr v-for="(event, eventid) in filterEvents" :key="eventid">
-                <td headers="Event ID">{{ event.eventid }}</td>
-                <td headers="Event Name">{{ event.eventname }}</td>
-                <td headers="Category">{{ event.category }}</td>
-                <td headers="Duration Hours">{{ event.durationhour }}</td>
+              <tr v-for="(event, eventid) in filteredEvents" :key="eventid">
+                <td headers="event-id">{{ event.eventid }}</td>
+                <td headers="event-name">{{ event.eventname }}</td>
+                <td headers="event-category">{{ event.category }}</td>
+                <td headers="event-duration">{{ event.durationhour }}</td>
               </tr>
             </tbody>
           </table>
@@ -236,8 +243,140 @@
       </div>
 
       <!-- Register Page -->
-      <div v-else-if="route == 'register'" class="container mt-5" id="body">
+      <div v-else-if="route == 'register'" class="container mt-5" id="register-body">
         <h2>Register</h2>
+        <form action="" @submit.prevent="submitForm" class="col-lg-6">
+          <div class="mb-3" id="login-info">
+            <h4>Login Information</h4>
+
+            <div class="form-group row mb-2">
+              <label for="uname" class="col-6 col-form-label">Username:</label>
+              <div class="col-6">
+                <input
+                  type="text"
+                  id="uname"
+                  name="uname"
+                  v-model="qRegister.user.uname"
+                  class="form-control"
+                />
+              </div>
+            </div>
+
+            <div class="form-group row mb-2">
+              <label for="upass" class="col-6 col-form-label">Password:</label>
+              <div class="col-6">
+                <input
+                  type="password"
+                  id="upass"
+                  name="upass"
+                  v-model="qRegister.user.upass"
+                  class="form-control"
+                />
+              </div>
+            </div>
+
+            <div class="form-group row mb-2">
+              <label for="upass2" class="col-6 col-form-label">Re-enter your password:</label>
+              <div class="col-6">
+                <input
+                  type="password"
+                  id="upass2"
+                  name="upass2"
+                  v-model="upass2"
+                  class="form-control"
+                />
+              </div>
+              <small v-if="!qRegister.user.isPasswordMatch(upass2)" class="text-muted"
+                >Password doesnt match</small
+              >
+            </div>
+          </div>
+          <!-- <div v-if="qRegister.user.upass !== '' ">
+            <small v-else-if="qRegister.user.isPasswordMatch(upass2)">Password is good</s>
+            </div> -->
+
+          <div class="mb-3" id="event-category">
+            <h4>Event Category Information</h4>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                id="rtechnology"
+                name="category"
+                value="technology"
+                v-model="qRegister.event.category"
+              />
+              <label class="form-check-label" for="technology">Technology </label>
+            </div>
+
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                id="rbusiness"
+                name="category"
+                value="business"
+                v-model="qRegister.event.category"
+                checked
+              />
+              <label class="form-check-label" for="business">Business</label>
+            </div>
+
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                id="rmarketing"
+                name="category"
+                value="marketing"
+                v-model="qRegister.event.category"
+              />
+              <label class="form-check-label" for="marketing">Marketing</label>
+            </div>
+
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                id="rfinance"
+                name="category"
+                value="finance"
+                v-model="qRegister.event.category"
+              />
+              <label class="form-check-label" for="finance">Finance</label><br />
+            </div>
+          </div>
+
+          <div class="mb-3" id="event-name">
+            <h4>Event Name</h4>
+            <div class="form-group">
+              <select
+                id="reventName"
+                name="reventName"
+                v-model="qRegister.event.name"
+                class="form-select"
+              >
+                <option value="" disabled selected>Select an event</option>
+                <option
+                  v-for="(event, eventid) in filteredEventsByCat"
+                  :key="eventid"
+                  :value="event.eventname"
+                >
+                  {{ event.eventname }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div v-if="submit === true" class="mb-3" id="summary">
+            <h4>Summary</h4>
+            <p class="m-0">Username: {{ qRegister.user.uname }}</p>
+            <p class="m-0 text-capitalize">Event Category: {{ qRegister.event.category }}</p>
+            <p class="m-0">Event Name: {{ qRegister.event.name }}</p>
+          </div>
+
+          <button type="submit" @click="submitForm()" class="mt-2 btn btn-primary">Submit</button>
+        </form>
       </div>
 
       <!-- Footer -->
@@ -263,15 +402,40 @@
     <script src="/framework/js/vue.global.js"></script>
     <script src="/framework/js/bootstrap.bundle.min.js"></script>
 
+    <!-- Vue Script -->
     <script>
       const { createApp } = Vue;
+
+      class User {
+        constructor() {
+          this.uname = "";
+          this.upass = "";
+        }
+
+        isPasswordMatch(pass) {
+          return this.upass === pass;
+        }
+      }
+
+      class Event {
+        constructor() {
+          this.id = "";
+          this.name = "";
+          this.category = "";
+          this.duration = "";
+        }
+      }
 
       createApp({
         data() {
           return {
             route: "home",
+            submit: false,
             isNavbarCollapsed: true,
-            qEvents: { id: "", name: "", category: "", duration: "" },
+            qEvent: new Event(),
+            qRegister: { user: new User(), event: new Event() },
+            user: new User(),
+            upass2: "",
             cards: [
               {
                 title: "Expert Planning",
@@ -439,30 +603,63 @@
             return this.route === link;
           },
           resetQuery() {
-            this.qEvents.id = "";
-            this.qEvents.name = "";
-            this.qEvents.category = "";
-            this.qEvents.duration = "";
+            this.qEvent.id = "";
+            this.qEvent.name = "";
+            this.qEvent.category = "";
+            this.qEvent.duration = "";
+          },
+          submitForm() {
+            this.submit = true;
+            this.route = "register";
+          },
+          filterEvents(query, filter = "") {
+            return this.events
+              .filter((e) => {
+                const filterId = e.eventid.toLowerCase().match(query.id.toLowerCase());
+                const filterName = e.eventname.toLowerCase().match(query.name.toLowerCase());
+                const filterCategory =
+                  query.category !== ""
+                    ? e.category.toLowerCase().match(query.category.toLowerCase())
+                    : true;
+                const filterDuration =
+                  query.duration !== "" ? e.durationhour == query.duration : true;
+
+                // Switch statement to handle the optional filter parameter
+                switch (filter) {
+                  case "id":
+                    return filterId;
+                  case "name":
+                    return filterName;
+                  case "category":
+                    return filterCategory;
+                  case "duration":
+                    return filterDuration;
+                  default:
+                    return filterId && filterName && filterCategory && filterDuration;
+                }
+              })
+              .map((event) => ({ ...event })); // Creates a shallow copy of the filtered events
+          },
+        },
+        watch: {
+          "qRegister.event.category": function (newVal, oldVal) {
+            if (oldVal !== newVal) {
+              this.qRegister.event.name = "";
+            }
           },
         },
         computed: {
-          filterEvents() {
-            return this.events.filter((e) => {
-              const filterId = e.eventid.toLowerCase().match(this.qEvents.id.toLowerCase());
-
-              const filterName = e.eventname.toLowerCase().match(this.qEvents.name.toLowerCase());
-
-              const filterCategory =
-                this.qEvents.category !== ""
-                  ? e.category.toLowerCase().match(this.qEvents.category.toLowerCase())
-                  : true;
-
-              const filterDuration =
-                this.qEvents.duration !== "" ? e.durationhour == this.qEvents.duration : true;
-
-              return filterId && filterName && filterCategory && filterDuration;
-            });
+          filteredEvents() {
+            return this.filterEvents(this.qEvent);
           },
+          filteredEventsByCat() {
+            console.log(this.qRegister.event.name);
+            return this.filterEvents(this.qRegister.event, "category");
+          },
+        },
+        created() {
+          this.submit = false;
+          this.qRegister.event.category = "business";
         },
       }).mount("#app");
     </script>
